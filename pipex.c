@@ -50,47 +50,58 @@ char    *get_command_path(char **env_variables, char *command)
     }
     return (NULL);
 }
-
-char	*ft_get_all_lines(int fd)
+void    wait_and_close(t_variables *var)
 {
-	char	*saver;
-	char	*last;
+    wait(NULL);
+    wait(NULL);
+    close(var->fd_pipe[INPUT_FD]);
+    close(var->fd_pipe[OUTPUT_FD]);
+    close(var->first_file_fd);
+    close(var->second_file_fd); 
+}
 
-	saver = NULL;
-	last = get_next_line(fd);
-	while (last)
-	{
-		saver = ft_strjoin(saver, last);
-		free (last);
-		last = get_next_line(fd);
-		if (!last)
-			break ;
-	}
-	return (saver);
+void    executing_command(t_variables *var, char **av,char **env_variables, int sign)
+{
+    if (sign == SECOND_CHILD_PROC)
+    {
+        close(var->fd_pipe[OUTPUT_FD]);
+        dup2(var->second_file_fd, OUTPUT_FD);
+        dup2(var->fd_pipe[INPUT_FD], INPUT_FD);
+        var->splited_command = ft_split(av[SECOND_COMMAND_ARG], ' ');
+        var->full_path = get_command_path(env_variables, var->splited_command[0]);
+        execve(var->full_path, var->splited_command, env_variables);
+    }
+    else
+    {
+        close(var->fd_pipe[INPUT_FD]);
+        dup2(var->first_file_fd, INPUT_FD);
+        dup2(var->fd_pipe[OUTPUT_FD], OUTPUT_FD);
+        var->splited_command = ft_split(av[FIRST_COMMAND_ARG], ' ');
+        var->full_path = get_command_path(env_variables, var->splited_command[0]);
+        execve(var->full_path, var->splited_command, env_variables);
+    }
 }
 
 int main(int ac, char **av, char **env_variables)
 {
-    int id;
-    // int fd[2];
-    char *full_path;
-    char **splited_argument;
-    // int fd;
+    t_variables var;
 
-    // fd = open(av[1], 2);
-    if (access(av[1], R_OK) != 0 || access(av[4], W_OK) != 0 || ac < 5)
+    var.fd_pipe = malloc(sizeof(int) * 2);
+    pipe(var.fd_pipe);
+    var.first_file_fd = open(av[FIRST_FILE_ARG], O_RDONLY);
+    var.second_file_fd = open(av[SECOND_FILE_ARG], O_RDWR | O_CREAT, 0777);
+    if (access(av[FIRST_FILE_ARG], R_OK) != 0 || access(av[SECOND_FILE_ARG], W_OK) != 0 || ac < 5)
         error_printing();
-    // pipe(fd);
-    id = fork();
-    splited_argument= ft_split(av[2], ' ');
-    full_path = get_command_path(env_variables, splited_argument[0]);
-    if (id == 0)
+    var.first_process_id = fork();
+    if (var.first_process_id == 0)
     {
-        execve(full_path, splited_argument, env_variables);
+        var.second_process_id = fork();
+        if (var.second_process_id == 0)
+            executing_command(&var, av, env_variables, SECOND_CHILD_PROC);
+        else
+            executing_command(&var, av, env_variables, FIRST_CHILD_PROC);
     }
-    else
-    {
-        wait(NULL);
-    }
-
+    else 
+       wait_and_close(&var);
+    while (1);
 }
