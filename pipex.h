@@ -31,12 +31,13 @@
 
 typedef struct s_variables
 {
-    char    **splited_command;
-    char    *full_path;
-    int     *fd_pipe;
     int     input_fd;
     int     output_fd;
     int     process_id;
 }               t_process_vars;
-
+typedef struct argument
+{
+    char    **splited_command;
+    char    *full_path;
+}               t_arg;
 #endif
