@@ -6,7 +6,7 @@
 /*   By: ael-hiou <ael-hiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/05 14:07:39 by ael-hiou          #+#    #+#             */
-/*   Updated: 2022/02/08 11:25:06 by ael-hiou         ###   ########.fr       */
+/*   Updated: 2022/02/08 11:30:04 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int main(int ac, char **av, char **env_variables)
         id = fork();
         if (id == 0)
         {
-            if (i == 0)
+            if (i == 1)
             {
                 close(pipes_array[i][0]);
                 dup2(first_file_fd, 0);
