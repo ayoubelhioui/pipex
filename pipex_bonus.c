@@ -6,7 +6,7 @@
 /*   By: ael-hiou <ael-hiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/05 14:07:39 by ael-hiou          #+#    #+#             */
-/*   Updated: 2022/02/07 12:02:14 by ael-hiou         ###   ########.fr       */
+/*   Updated: 2022/02/08 11:25:06 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void    executing_command(char **av, char **env_variables,int arg_position)
     
     arg.splited_command = ft_split(av[arg_position], ' ');
     arg.full_path = get_command_path(env_variables, arg.splited_command[0]);
+    printf("Im In The Execute \n");
     execve(arg.full_path, arg.splited_command, env_variables);
 }
 
@@ -98,13 +99,11 @@ int main(int ac, char **av, char **env_variables)
     pipe_fd = malloc(sizeof(int) * 2);
     pipes_array = malloc(sizeof(pipe_fd) * (command_number) - 1);
     first_file_fd = open(av[FIRST_FILE_ARG], O_RDONLY);
-    second_file_fd = open(av[SECOND_FILE_ARG], O_RDWR | O_CREAT, 0777);
-    dup2(first_file_fd, 0);
-    pipes_array[0][0] = first_file_fd;
-    pipes_array[command_number - 1][0] = second_file_fd;
-    if (access(av[FIRST_FILE_ARG], R_OK) != 0 || access(av[SECOND_FILE_ARG], W_OK) != 0 || ac < 5)
+    second_file_fd = open(av[ac - 1], O_RDWR | O_CREAT, 0777);
+    if (access(av[FIRST_FILE_ARG], R_OK) != 0 || access(av[ac - 1], W_OK) != 0 || ac < 5)
         error_printing();
-    while (i < command_number)
+    int j = 0;
+    while (i < command_number && j < 1)
     {
         pipe(pipes_array[i]);
         id = fork();
@@ -112,20 +111,31 @@ int main(int ac, char **av, char **env_variables)
         {
             if (i == 0)
             {
+                close(pipes_array[i][0]);
+                dup2(first_file_fd, 0);
                 dup2(pipes_array[i][1], 1);
+                printf("Im Here\n");
                 executing_command(av, env_variables, (i + 2));
+            }
+            else if (i == command_number - 1)
+            {
+                dup2(pipes_array[i - 1][0], 0);
+                close(pipes_array[i - 1][0]);
+                close(pipes_array[i - 1][1]);
+                dup2(second_file_fd, 1);
             }
             else
             {
-                dup2(pipes_array[i - 1][1], 1);
-                dup2(pipes_array[i][0], 0);
+                dup2(pipes_array[i - 1][0], 0);
+                close(pipes_array[i - 1][0]);
+                close(pipes_array[i - 1][1]);
+                dup2(pipes_array[i][1], 1);
                 executing_command(av, env_variables, (i + 2));
             }
         }
         else
-        {
             waitpid(id, 0, 0);
-        }
         i++;
+        j++;
     }
 }

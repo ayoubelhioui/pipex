@@ -17,7 +17,7 @@ NAME = pipex
 
 all:$(NAME)
 $(NAME): $(SRC)
-	@$(CC) $(CFLAGS) $(SRC) -o $(NAME)
+	@$(CC) $(CFLAGS) $(SRC) -o $(NAME) -g
 clean:
 	 
 fclean:clean
