@@ -1,4 +1,3 @@
-import 'dart:io';
   
  int check_duplicates(String str)
 {
@@ -19,13 +18,12 @@ import 'dart:io';
   }
   return (0);
 } 
+
+
 void  main()
 {
-  int a;
-  a = -5;
-  if (a.isNegative)
-    print("Yes");
-  else
-    print("No\n");
+  String name = "Ayoub";
+  print("the Length Is : ${name.length.isOdd}");
+
 
 }

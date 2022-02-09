@@ -73,7 +73,7 @@ void    executing_command(t_variables *var, char **av,char **env_variables, int 
     }
     else
     {
-        close(var->fd_pipe[INPUT_FD]);
+        close(var->fd_pipe[INPUT_FD];
         dup2(var->first_file_fd, INPUT_FD);
         dup2(var->fd_pipe[OUTPUT_FD], OUTPUT_FD);
         var->splited_command = ft_split(av[FIRST_COMMAND_ARG], ' ');

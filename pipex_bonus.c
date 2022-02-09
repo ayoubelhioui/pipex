@@ -6,7 +6,7 @@
 /*   By: ael-hiou <ael-hiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/05 14:07:39 by ael-hiou          #+#    #+#             */
-/*   Updated: 2022/02/08 11:30:04 by ael-hiou         ###   ########.fr       */
+/*   Updated: 2022/02/09 12:17:53 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void    error_printing()
     ft_putstr("Error\n");
     exit(1);
 }
+
 char    *get_command_path(char **env_variables, char *command)
 {
     char *full_path;
@@ -48,94 +49,101 @@ char    *get_command_path(char **env_variables, char *command)
             return (full_path);
         i++;
     }
-    return (NULL);
+    return (command);
 }
 
-// void    executing_command(t_process_vars *var, char **av,char **env_variables, int sign)
-// {
-//     if (sign == SECOND_CHILD_PROC)
-//     {
-//         close(var->fd_pipe[OUTPUT_FD]);
-//         dup2(var->second_file_fd, OUTPUT_FD);
-//         dup2(var->fd_pipe[INPUT_FD], INPUT_FD);
-//         var->splited_command = ft_split(av[SECOND_COMMAND_ARG], ' ');
-//         var->full_path = get_command_path(env_variables, var->splited_command[0]);
-//         execve(var->full_path, var->splited_command, env_variables);
-//     }
-//     else
-//     {
-//         close(var->fd_pipe[INPUT_FD]);
-//         dup2(var->first_file_fd, INPUT_FD);
-//         dup2(var->fd_pipe[OUTPUT_FD], OUTPUT_FD);
-//         var->splited_command = ft_split(av[FIRST_COMMAND_ARG], ' ');
-//         var->full_path = get_command_path(env_variables, var->splited_command[0]);
-//         execve(var->full_path, var->splited_command, env_variables); 
-//     }
-// }
-void    executing_command(char **av, char **env_variables,int arg_position)
+void    executing_command(char **av, char **env_variables, int arg_position)
 {
     t_arg arg;
 
     
     arg.splited_command = ft_split(av[arg_position], ' ');
     arg.full_path = get_command_path(env_variables, arg.splited_command[0]);
-    printf("Im In The Execute \n");
     execve(arg.full_path, arg.splited_command, env_variables);
 }
 
+void    close_pipes(int (*pipes_array)[2], int array_length,int position)
+{
+    int i;
+
+    i = 0;
+    while (i < array_length)
+    {
+        if(i != position  - 1)
+            close(pipes_array[i][0]); 
+        if (i != position)
+             close(pipes_array[i][1]);
+        i++;
+    }
+}
+
+void    wait_for_childs(int *p_ids, int commands_number)
+{
+    int i;
+
+    i = 0;
+    while (i < commands_number)
+        waitpid(p_ids[i++], 0, 0);
+}
+void    duplicating(int input, int output)
+{
+   dup2(input, 0);
+   dup2(output, 1);  
+}
 
 int main(int ac, char **av, char **env_variables)
 {
-    int id;
+    int *p_ids;
     int first_file_fd;
     int second_file_fd;
     int command_number;
     int i;
-    int *pipe_fd;
-    int **pipes_array;
+    int (*pipes_array)[2];
+    int pipes_number;
 
     i = 0;
     command_number = ac - 3;
-    pipe_fd = malloc(sizeof(int) * 2);
-    pipes_array = malloc(sizeof(pipe_fd) * (command_number) - 1);
+    p_ids = malloc(sizeof(int) * command_number);
+    pipes_number = command_number - 1;
+    pipes_array = malloc(sizeof(int *) * (command_number - 1));
     first_file_fd = open(av[FIRST_FILE_ARG], O_RDONLY);
     second_file_fd = open(av[ac - 1], O_RDWR | O_CREAT, 0777);
-    if (access(av[FIRST_FILE_ARG], R_OK) != 0 || access(av[ac - 1], W_OK) != 0 || ac < 5)
+    if (access(av[ac - 1], W_OK) != 0 || ac < 5)
         error_printing();
-    int j = 0;
-    while (i < command_number && j < 1)
+    // int j = 0;
+    while (i < command_number)
     {
+        if (access(av[FIRST_FILE_ARG], F_OK) == -1)
+            i = 1;
         pipe(pipes_array[i]);
-        id = fork();
-        if (id == 0)
+        p_ids[i] = fork();
+        if (p_ids[i] == 0)
         {
-            if (i == 1)
+            close_pipes(pipes_array, (command_number- 1), i);
+            if (i == 0)
             {
-                close(pipes_array[i][0]);
-                dup2(first_file_fd, 0);
-                dup2(pipes_array[i][1], 1);
-                printf("Im Here\n");
-                executing_command(av, env_variables, (i + 2));
+                duplicating(first_file_fd, pipes_array[i][1]);
+                // dup2(first_file_fd, 0);
+                // dup2(pipes_array[i][1], 1);
             }
             else if (i == command_number - 1)
             {
-                dup2(pipes_array[i - 1][0], 0);
-                close(pipes_array[i - 1][0]);
-                close(pipes_array[i - 1][1]);
-                dup2(second_file_fd, 1);
+                duplicating(pipes_array[i - 1][0], second_file_fd);
+                // dup2(second_file_fd, 1);
+                // dup2(pipes_array[i - 1][0], 0);
             }
             else
             {
-                dup2(pipes_array[i - 1][0], 0);
-                close(pipes_array[i - 1][0]);
-                close(pipes_array[i - 1][1]);
-                dup2(pipes_array[i][1], 1);
-                executing_command(av, env_variables, (i + 2));
+                duplicating(pipes_array[i - 1][0], pipes_array[i][1]);
+                // dup2(pipes_array[i - 1][0], 0);
+                // dup2(pipes_array[i][1], 1);
             }
+            executing_command(av, env_variables, (i + 2));
         }
-        else
-            waitpid(id, 0, 0);
         i++;
-        j++;
+        // j++;
     }
+    close_pipes(pipes_array, (command_number- 1), - 1);
+    wait_for_childs(p_ids, command_number);
+  
 }
