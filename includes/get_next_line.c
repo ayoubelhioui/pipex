@@ -6,7 +6,7 @@
 /*   By: ael-hiou <ael-hiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 10:40:28 by ael-hiou          #+#    #+#             */
-/*   Updated: 2021/11/26 16:20:58 by ael-hiou         ###   ########.fr       */
+/*   Updated: 2022/02/09 14:23:30 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ char	*get_next_line(int fd)
 		buffer = NULL;
 		return (line);
 	}
-	line = ft_cut(buffer, index_new_line + 1);
+	line = ft_cut(buffer, index_new_line);
 	buffer = coppy_remainder(buffer, index_new_line + 1);
 	return (line);
 }

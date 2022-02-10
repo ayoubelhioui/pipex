@@ -31,9 +31,12 @@
 
 typedef struct s_variables
 {
-    int     input_fd;
-    int     output_fd;
-    int     process_id;
+    int *p_ids;
+    int (*pipes_array)[2];
+    int first_file_fd;
+    int second_file_fd;
+    int command_number;
+    int pipes_number;
 }               t_process_vars;
 typedef struct argument
 {
