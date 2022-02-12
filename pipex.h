@@ -37,6 +37,7 @@ typedef struct s_variables
     int output_fd;
     int command_number;
     int pipes_number;
+    int first_command_position;
 }               t_process_vars;
 typedef struct argument
 {
