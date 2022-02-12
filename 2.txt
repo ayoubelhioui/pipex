@@ -1,1 +1,15 @@
-      15
+total 96
+drwxr-xr-x  14 ael-hiou  2019    476 Feb 12 10:45 .
+drwxr-xr-x  13 ael-hiou  2019    442 Feb 11 15:45 ..
+-rw-r--r--@  1 ael-hiou  2019   6148 Feb 10 17:13 .DS_Store
+drwxr-xr-x  13 ael-hiou  2019    442 Feb 11 13:43 .git
+drwxr-xr-x   4 ael-hiou  2019    136 Feb  7 18:47 .vscode
+-rwxr-xr-x   1 ael-hiou  2019      0 Feb 12 10:45 2.txt
+-rwxrwxrwx   1 ael-hiou  2019   1200 Feb  7 18:47 Makefile
+drwxr-xr-x   8 ael-hiou  2019    272 Feb  3 13:50 includes
+drwxr-xr-x  16 ael-hiou  2019    544 Feb  3 14:00 libft
+-rwxr-xr-x   1 ael-hiou  2019  17144 Feb 12 10:45 pipex
+-rw-r--r--   1 ael-hiou  2019   3573 Feb  8 11:59 pipex.c
+drwxr-xr-x   3 ael-hiou  2019    102 Feb  9 13:42 pipex.dSYM
+-rw-r--r--   1 ael-hiou  2019   1680 Feb 11 15:38 pipex.h
+-rw-r--r--   1 ael-hiou  2019   4911 Feb 11 15:39 pipex_bonus.c
