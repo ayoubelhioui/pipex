@@ -1,39 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_bonus.c                                      :+:      :+:    :+:   */
+/*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-hiou <ael-hiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/05 14:07:39 by ael-hiou          #+#    #+#             */
-/*   Updated: 2022/02/12 15:40:31 by ael-hiou         ###   ########.fr       */
+/*   Updated: 2022/02/13 11:58:08 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	ft_strcmp(char *s1, char *s2)
-{
-	size_t	i;
-
-	i = 0;
-	while (s1[i] == s2[i] && s1[i] && s2[i])
-		i++;
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
-
-void    ft_putstr(char *str, int fd)
-{
-    int i;
-
-    i = 0;
-    while (str[i])
-        write(fd, &str[i++], 1);
-}
-
 void     error_printing()
 {
-    ft_putstr("Error\n", OUTPUT_FD);
+    ft_putstr_fd("Error\n", OUTPUT_FD);
     exit(1);
 }
 
@@ -47,15 +28,15 @@ char    *get_command_path(char **env_variables, char *command)
     while (env_variables[i])
     {
         if (ft_strncmp(env_variables[i], "PATH", 4) == 0)
-            break;
+            break; 
         i++;
     }
     path = ft_split(env_variables[i], ':');
     i = 0;
     while (path[i])
     {
-        full_path = ft_strjoin(ft_strjoin(path[i],"/"), command);
-        if (access(full_path, F_OK) == 0)
+        full_path = ft_strjoin(ft_strjoin(path[i], "/"), command);
+        if (access(full_path, F_OK) == 0) 
             return (full_path);
         i++;
     }
@@ -70,7 +51,7 @@ void    executing_command(char **av, char **env_variables, int arg_position)
     arg.full_path = get_command_path(env_variables, arg.splited_command[0]);
     if (execve(arg.full_path, arg.splited_command, env_variables) == -1)
     {
-        ft_putstr("Command Not Found \n", 2);
+        ft_putstr_fd("Command Not Found \n", 2);
         exit(1);
     }
 }
@@ -98,6 +79,7 @@ void    wait_for_childs(int *p_ids, int commands_number)
     while (i < commands_number)
         waitpid(p_ids[i++], 0, 0);
 }
+
 void    duplicating(int input, int output)
 {
    dup2(input, 0);
@@ -118,8 +100,8 @@ int get_input_lines(char *limiter)
 	{
         if (ft_strcmp(last, limiter) == 0)
             break ;
-        ft_putstr(last, fd);
-        ft_putstr("\n", fd);
+        ft_putstr_fd(last, fd);
+        ft_putstr_fd("\n", fd);
         last = get_next_line(0);
 	}
     close(fd);
@@ -138,7 +120,7 @@ void    pipe_simulating(t_process_vars *vars, char **av, char **env_variables, i
         {
             if (vars->input_fd < 0)
             {
-                ft_putstr("no such file or directory\n", OUTPUT_FD);
+                ft_putstr_fd("no such file or directory\n", OUTPUT_FD);
                 exit(1);
             }
             duplicating(vars->input_fd, vars->pipes_array[index][1]);
@@ -150,6 +132,7 @@ void    pipe_simulating(t_process_vars *vars, char **av, char **env_variables, i
         executing_command(av, env_variables, (index + vars->first_command_position));
     }
 }
+
 void    getting_things_ready(t_process_vars *vars, char **av, int ac)
 {
 
@@ -165,13 +148,13 @@ void    getting_things_ready(t_process_vars *vars, char **av, int ac)
     }
     else
     {
-        vars->output_fd = open(av[ac - 1], O_RDWR | O_CREAT |O_TRUNC, 0777);
+        vars->output_fd = open(av[ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0777);
         vars->input_fd = open(av[FIRST_FILE_ARG], O_RDONLY);
     }
     vars->pipes_number = vars->command_number - 1;
     vars->pipes_array = malloc(sizeof(int *) * vars->pipes_number);
-    if (access(av[ac - 1], W_OK) != 0 || ac < 5)
-        error_printing();   
+    if (ac < 5)
+        error_printing();
 }
 
 int main(int ac, char **av, char **env_variables)
@@ -182,7 +165,10 @@ int main(int ac, char **av, char **env_variables)
     i = 0;
     getting_things_ready(&vars, av, ac);
     while (i < vars.command_number)
-        pipe_simulating(&vars, av, env_variables, i++);
+    {
+        pipe_simulating(&vars, av, env_variables, i);
+        i++;
+    }
     close_pipes(vars.pipes_array, vars.pipes_number, -1);
     wait_for_childs(vars.p_ids, vars.command_number);
     close(vars.input_fd);

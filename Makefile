@@ -12,7 +12,7 @@
 
 CC = cc
 CFLAGS = -Wextra -Werror -Wall
-SRC = pipex_bonus.c includes/get_next_line.c includes/get_next_line_utils.c libft/ft_split.c libft/ft_strncmp.c
+SRC = pipex.c includes/get_next_line.c includes/get_next_line_utils.c libft/ft_putstr_fd.c libft/ft_split.c libft/ft_strcmp.c libft/ft_strncmp.c
 NAME = pipex
 
 all:$(NAME)

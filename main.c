@@ -1,25 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_bzero.c                                         :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-hiou <ael-hiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/04 10:09:18 by ael-hiou          #+#    #+#             */
-/*   Updated: 2021/11/16 15:14:44 by ael-hiou         ###   ########.fr       */
+/*   Created: 2022/02/12 18:53:10 by ael-hiou          #+#    #+#             */
+/*   Updated: 2022/02/12 18:55:07 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-void	ft_bzero(void *s, size_t n)
+#include <stdio.h>
+int main(int ac, char **av, char **env)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < n)
-	{
-		((unsigned char *)s)[i] = '\0';
-		i++;
-	}
+    int i = 0;
+    while (env[i])
+        printf("%s\n", env[i++]);
 }

@@ -1,34 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_front_bonus.c                            :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ael-hiou <ael-hiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/08 09:29:35 by ael-hiou          #+#    #+#             */
-/*   Updated: 2022/01/16 19:09:55 by marvin           ###   ########.fr       */
+/*   Created: 2022/02/12 16:05:01 by ael-hiou          #+#    #+#             */
+/*   Updated: 2022/02/12 16:37:26 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstadd_front(t_stack **lst, t_stack *new)
+void    ft_putstr_fd(char *str, int fd)
 {
-	t_stack	*temp;
+    int i;
 
-	if (!lst)
-		return ;
-	if (!*lst)
-	{	
-		*lst = new;
-		new ->next = NULL;
-		new->previous = NULL;
-	}
-	else
-	{
-		temp = *lst;
-		temp->previous = new;
-		*lst = new;
-		new -> next = temp;
-	}
+    i = 0;
+    while (str[i])
+        write(fd, &str[i++], 1);
 }
+
