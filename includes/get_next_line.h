@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 12:09:11 by ael-hiou          #+#    #+#             */
-/*   Updated: 2022/01/26 13:49:34 by marvin           ###   ########.fr       */
+/*   Updated: 2022/02/13 14:43:22 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <unistd.h>
-#define BUFFER_SIZE 10
+# define BUFFER_SIZE 10
+
 char	*ft_strdup(char *src);
 size_t	ft_strlen(char *str);
 char	*ft_strjoin(char *s1, char *s2);

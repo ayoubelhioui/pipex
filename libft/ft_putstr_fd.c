@@ -6,18 +6,17 @@
 /*   By: ael-hiou <ael-hiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/12 16:05:01 by ael-hiou          #+#    #+#             */
-/*   Updated: 2022/02/12 16:37:26 by ael-hiou         ###   ########.fr       */
+/*   Updated: 2022/02/13 14:45:10 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void    ft_putstr_fd(char *str, int fd)
+void	ft_putstr_fd(char *str, int fd)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (str[i])
-        write(fd, &str[i++], 1);
+	i = 0;
+	while (str[i])
+		write(fd, &str[i++], 1);
 }
-
