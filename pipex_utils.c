@@ -6,7 +6,7 @@
 /*   By: ael-hiou <ael-hiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 12:13:14 by ael-hiou          #+#    #+#             */
-/*   Updated: 2022/02/13 15:50:00 by ael-hiou         ###   ########.fr       */
+/*   Updated: 2022/02/14 20:02:14 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,15 @@ void	error_printing(char *str, int standard)
 	exit(1);
 }
 
-void	close_pipes(int (*pipes_array)[2], int array_length, int position)
+void	close_pipes(int (*pipes_array)[2], int array_length)
 {
 	int	i;
 
 	i = 0;
 	while (i < array_length)
 	{
-		if (i != position - 1)
-			close(pipes_array[i][0]);
-		if (i != position)
-			close(pipes_array[i][1]);
+		close(pipes_array[i][1]);
+		close(pipes_array[i][0]);
 		i++;
 	}
 }
@@ -64,6 +62,7 @@ int	get_input_lines(char *limiter)
 			break ;
 		ft_putstr_fd(last, hidden_file_fd);
 		ft_putstr_fd("\n", hidden_file_fd);
+		free(last);
 		last = get_next_line(0);
 	}
 	close(hidden_file_fd);

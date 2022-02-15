@@ -24,7 +24,6 @@
 # define INPUT_FD 0
 # define OUTPUT_FD 1
 # define ERROR_FD 2
-# define ALL_PIPES -1
 # define FIRST_FILE_ARG 1
 # define SECOND_FILE_ARG 4
 # define FIRST_COMMAND_ARG 2
@@ -50,7 +49,7 @@ typedef struct argument
 }				t_arg;
 
 void	error_printing(char *str, int standard);
-void	close_pipes(int (*pipes_array)[2], int array_length, int position);
+void	close_pipes(int (*pipes_array)[2], int array_length);
 void	wait_for_childs(int *p_ids, int commands_number);
 void	duplicating(int input, int output);
 int		get_input_lines(char *limiter);

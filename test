@@ -1,0 +1,14 @@
+total 72$
+drwxr-xr-x  13 ael-hiou  2019    442 Feb 14 12:12 .$
+drwxr-xr-x  13 ael-hiou  2019    442 Feb 14 11:15 ..$
+drwxr-xr-x  13 ael-hiou  2019    442 Feb 13 18:44 .git$
+drwxr-xr-x   4 ael-hiou  2019    136 Feb  7 18:47 .vscode$
+-rwxr-xr-x   1 ael-hiou  2019      9 Feb 14 12:11 2.txt$
+-rwxrwxrwx   1 ael-hiou  2019   1229 Feb 13 18:43 Makefile$
+drwxr-xr-x   8 ael-hiou  2019    272 Feb 13 14:43 includes$
+drwxr-xr-x   8 ael-hiou  2019    272 Feb 13 18:44 libft$
+-rwxr-xr-x   1 ael-hiou  2019  14336 Feb 14 12:12 pipex$
+-rw-r--r--   1 ael-hiou  2019   3757 Feb 14 11:58 pipex.c$
+-rw-r--r--   1 ael-hiou  2019   2012 Feb 13 15:46 pipex.h$
+-rw-r--r--   1 ael-hiou  2019   1956 Feb 14 12:12 pipex_utils.c$
+-rwxr-xr-x   1 ael-hiou  2019      0 Feb 14 12:12 test$
