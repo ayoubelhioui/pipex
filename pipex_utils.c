@@ -6,7 +6,7 @@
 /*   By: ael-hiou <ael-hiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 12:13:14 by ael-hiou          #+#    #+#             */
-/*   Updated: 2022/02/14 20:02:14 by ael-hiou         ###   ########.fr       */
+/*   Updated: 2022/02/15 12:38:45 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int	get_input_lines(char *limiter)
 		free(last);
 		last = get_next_line(0);
 	}
+	free(last);
 	close(hidden_file_fd);
 	open(HIDDEN_FILE, O_RDONLY, FULL_ACCESS);
 	return (hidden_file_fd);

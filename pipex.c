@@ -6,7 +6,7 @@
 /*   By: ael-hiou <ael-hiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/05 14:07:39 by ael-hiou          #+#    #+#             */
-/*   Updated: 2022/02/15 10:48:10 by ael-hiou         ###   ########.fr       */
+/*   Updated: 2022/02/16 10:55:09 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,7 @@ char	*get_command_path(char **env_variables, char *command)
 	{
 		full_path = ft_strjoin(ft_strjoin(path[i], "/"), command);
 		if (access(full_path, F_OK) == 0)
-		{
-			i = 0;
-			while (path[i])
-				free(path[i++]);
-			free(path);
 			return (full_path);
-		}
 	}
 	return (command);
 }
@@ -53,11 +47,32 @@ void	executing_command(char **av, char **env_variables, int arg_position)
 		error_printing("Command Not Found\n", ERROR_FD);
 }
 
+void	getting_things_ready(t_process_vars *vars, char **av, int ac)
+{
+	vars->command_number = ac - 3;
+	vars->p_ids = malloc(sizeof(int) * vars->command_number);
+	vars->first_command_position = 2;
+	if (ft_strcmp(av[FIRST_FILE_ARG], HERE_DOC) == 0)
+	{
+		vars->output_fd = open(av[ac - 1], O_RDWR | O_CREAT \
+				| O_APPEND, FULL_ACCESS);
+		vars->input_fd = get_input_lines(av[2]);
+		vars->command_number--;
+		vars->first_command_position++;
+	}
+	else
+	{
+		vars->input_fd = open(av[FIRST_FILE_ARG], O_RDONLY);
+		vars->output_fd = open(av[ac - 1], O_RDWR \
+				| O_CREAT | O_TRUNC, FULL_ACCESS);
+	}
+	vars->pipes_number = vars->command_number - 1;
+	vars->pipes_array = malloc(sizeof(int *) * vars->pipes_number);
+}
+
 void	pipe_simulating(t_process_vars *vars, char **av, \
 		char **env_variables, int index)
 {
-	pipe(vars->pipes_array[index]);
-	vars->p_ids[index] = fork();
 	if (vars->p_ids[index] == 0)
 	{
 		if (index == 0)
@@ -85,30 +100,6 @@ void	pipe_simulating(t_process_vars *vars, char **av, \
 	}
 }
 
-void	getting_things_ready(t_process_vars *vars, char **av, int ac)
-{
-	vars->command_number = ac - 3;
-	vars->p_ids = malloc(sizeof(int) * vars->command_number);
-	vars->first_command_position = 2;
-	if (ft_strcmp(av[FIRST_FILE_ARG], HERE_DOC) == 0)
-	{
-		vars->input_fd = open(av[FIRST_FILE_ARG], O_RDONLY);
-		vars->output_fd = open(av[ac - 1], O_RDWR | O_CREAT \
-				| O_APPEND, FULL_ACCESS);
-		vars->input_fd = get_input_lines(av[2]);
-		vars->command_number--;
-		vars->first_command_position++;
-	}
-	else
-	{
-		vars->input_fd = open(av[FIRST_FILE_ARG], O_RDONLY);
-		vars->output_fd = open(av[ac - 1], O_RDWR \
-				| O_CREAT | O_TRUNC, FULL_ACCESS);
-	}
-	vars->pipes_number = vars->command_number - 1;
-	vars->pipes_array = malloc(sizeof(int *) * vars->pipes_number);
-}
-
 int	main(int ac, char **av, char **env_variables)
 {
 	t_process_vars	vars;
@@ -120,6 +111,8 @@ int	main(int ac, char **av, char **env_variables)
 	getting_things_ready(&vars, av, ac);
 	while (i < vars.command_number)
 	{
+		pipe(vars.pipes_array[i]);
+		vars.p_ids[i] = fork();
 		pipe_simulating(&vars, av, env_variables, i);
 		i++;
 	}
