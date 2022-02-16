@@ -6,7 +6,7 @@
 /*   By: ael-hiou <ael-hiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/05 14:07:39 by ael-hiou          #+#    #+#             */
-/*   Updated: 2022/02/16 10:55:09 by ael-hiou         ###   ########.fr       */
+/*   Updated: 2022/02/16 11:20:49 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ void	getting_things_ready(t_process_vars *vars, char **av, int ac)
 	vars->first_command_position = 2;
 	if (ft_strcmp(av[FIRST_FILE_ARG], HERE_DOC) == 0)
 	{
-		vars->output_fd = open(av[ac - 1], O_RDWR | O_CREAT \
-				| O_APPEND, FULL_ACCESS);
+		vars->output_fd = open(av[ac - 1], O_RDWR | O_CREAT | O_APPEND, FULL_ACCESS);
 		vars->input_fd = get_input_lines(av[2]);
 		vars->command_number--;
 		vars->first_command_position++;
@@ -63,15 +62,13 @@ void	getting_things_ready(t_process_vars *vars, char **av, int ac)
 	else
 	{
 		vars->input_fd = open(av[FIRST_FILE_ARG], O_RDONLY);
-		vars->output_fd = open(av[ac - 1], O_RDWR \
-				| O_CREAT | O_TRUNC, FULL_ACCESS);
+		vars->output_fd = open(av[ac - 1], O_RDWR | O_CREAT | O_TRUNC, FULL_ACCESS);
 	}
 	vars->pipes_number = vars->command_number - 1;
 	vars->pipes_array = malloc(sizeof(int *) * vars->pipes_number);
 }
 
-void	pipe_simulating(t_process_vars *vars, char **av, \
-		char **env_variables, int index)
+void	pipe_simulating(t_process_vars *vars, char **av, char **env_variables, int index)
 {
 	if (vars->p_ids[index] == 0)
 	{
@@ -85,18 +82,15 @@ void	pipe_simulating(t_process_vars *vars, char **av, \
 		else if (index == vars->command_number - 1)
 		{
 			close(vars->pipes_array[index - 1][OUTPUT_FD]);
-			duplicating(vars->pipes_array[index - 1][INPUT_FD], \
-					vars->output_fd);
+			duplicating(vars->pipes_array[index - 1][INPUT_FD], vars->output_fd);
 		}
 		else
 		{
 			close(vars->pipes_array[index - 1][OUTPUT_FD]);
 			close(vars->pipes_array[index][INPUT_FD]);
-			duplicating(vars->pipes_array[index - 1][INPUT_FD], \
-				vars->pipes_array[index][OUTPUT_FD]);
+			duplicating(vars->pipes_array[index - 1][INPUT_FD], vars->pipes_array[index][OUTPUT_FD]);
 		}
-		executing_command(av, env_variables, \
-				(index + vars->first_command_position));
+		executing_command(av, env_variables, (index + vars->first_command_position));
 	}
 }
 
