@@ -12,13 +12,15 @@
 
 CC = cc
 CFLAGS = -Wextra -Werror -Wall
-SRC = pipex.c includes/get_next_line.c includes/get_next_line_utils.c libft/ft_putstr_fd.c libft/ft_split.c libft/ft_strcmp.c libft/ft_strncmp.c pipex_utils.c
+SRC = pipex.c includes/get_next_line.c includes/get_next_line_utils.c \
+libft/ft_putstr_fd.c libft/ft_split.c libft/ft_strcmp.c libft/ft_strncmp.c \
+pipex_utils.c
 NAME = pipex
 
 all:$(NAME)
 $(NAME): $(SRC)
 	@$(CC) $(CFLAGS) $(SRC) -o $(NAME)
-
+bonus : $(NAME)
 fclean:
 	@rm -f $(NAME)
 re:fclean all

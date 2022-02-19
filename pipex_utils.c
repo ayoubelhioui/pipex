@@ -6,16 +6,25 @@
 /*   By: ael-hiou <ael-hiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 12:13:14 by ael-hiou          #+#    #+#             */
-/*   Updated: 2022/02/15 12:38:45 by ael-hiou         ###   ########.fr       */
+/*   Updated: 2022/02/18 15:03:07 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	error_printing(char *str, int standard)
+void	close_unused_pipes(int (*pipes_array)[2], int idx_process)
 {
-	ft_putstr_fd(str, standard);
-	exit(1);
+	int	i;
+
+	i = 0;
+	while (i <= idx_process)
+	{
+		if (i != idx_process - 1)
+			close(pipes_array[i][0]);
+		if (i != idx_process)
+			close (pipes_array[i][1]);
+		i++;
+	}
 }
 
 void	close_pipes(int (*pipes_array)[2], int array_length)

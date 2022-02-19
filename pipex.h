@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/26 16:30:31 by marvin            #+#    #+#             */
-/*   Updated: 2022/02/13 14:41:52 by ael-hiou         ###   ########.fr       */
+/*   Updated: 2022/02/18 15:02:33 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PIPEX_H
 # include <stdio.h>
 # include <fcntl.h>
+# include <errno.h>
 # include <string.h>
 # include <unistd.h>
 # include <sys/wait.h>
@@ -44,8 +45,8 @@ typedef struct argument
 	char	**splited_command;
 	char	*full_path;
 }				t_arg;
-
 void	error_printing(char *str, int standard);
+void	close_unused_pipes(int (*pipes_array)[2], int idx_process);
 void	close_pipes(int (*pipes_array)[2], int array_length);
 void	wait_for_childs(int *p_ids, int commands_number);
 void	duplicating(int input, int output);

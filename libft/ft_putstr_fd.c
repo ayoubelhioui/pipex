@@ -6,7 +6,7 @@
 /*   By: ael-hiou <ael-hiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/12 16:05:01 by ael-hiou          #+#    #+#             */
-/*   Updated: 2022/02/13 14:45:10 by ael-hiou         ###   ########.fr       */
+/*   Updated: 2022/02/18 15:03:52 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,4 +19,10 @@ void	ft_putstr_fd(char *str, int fd)
 	i = 0;
 	while (str[i])
 		write(fd, &str[i++], 1);
+}
+
+void	error_printing(char *str, int standard)
+{
+	ft_putstr_fd(str, standard);
+	exit(1);
 }
