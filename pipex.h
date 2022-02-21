@@ -20,7 +20,7 @@
 # include <sys/wait.h>
 # include "includes/get_next_line.h"
 # include "includes/get_next_line_bonus.h"
-# include "libft/libft.h"
+# include "helper_files/libft.h"
 
 # define INPUT_FD 0
 # define OUTPUT_FD 1

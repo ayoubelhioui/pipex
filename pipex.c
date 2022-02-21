@@ -6,7 +6,7 @@
 /*   By: ael-hiou <ael-hiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/05 14:07:39 by ael-hiou          #+#    #+#             */
-/*   Updated: 2022/02/19 13:33:14 by ael-hiou         ###   ########.fr       */
+/*   Updated: 2022/02/21 12:47:04 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,49 @@ char	*get_command_path(char **env_variables, char *command)
 	}
 	return (command);
 }
+// char *between_quotes(char *command)
+// {
+// 	int i;
 
+// 	i = 0;
+// 	while (command[i] || command[i] != '\'')
+// 		i++;
+// 	ret
+// }
+char	**find_quotes(char *command)
+{
+	int	i;
+	char **s;
+
+	i = 0;
+	s = NULL;
+	while (command[i])
+	{
+		if (command[i] == '\'')
+		{
+			s = malloc(sizeof(char *) * 3);
+			s[0] = ft_substr(command, 0, i - 1);
+			s[1] = ft_substr(command, i + 1, ft_strlen(command) - i - 2);
+			s[2] = NULL;	
+			return (s);
+		}
+		i++;
+	}
+	return (NULL);
+}
 void	executing_command(char **av, char **env_variables, int arg_position)
 {
 	t_arg	arg;
+	char **quotes_handling;
 
+	quotes_handling = NULL;
 	if (ft_strlen(av[arg_position]) == 0)
 		error_printing("Command Not Found\n", ERROR_FD);
-	arg.splited_command = ft_split(av[arg_position], ' ');
+	quotes_handling = find_quotes(av[arg_position]);
+	if (quotes_handling)
+		arg.splited_command = quotes_handling;
+	else
+		arg.splited_command = ft_split(av[arg_position], ' ');
 	arg.full_path = get_command_path(env_variables, arg.splited_command[0]);
 	if (execve(arg.full_path, arg.splited_command, env_variables) == -1)
 		error_printing("Command Not Found\n", ERROR_FD);
