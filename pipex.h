@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/26 16:30:31 by marvin            #+#    #+#             */
-/*   Updated: 2022/02/18 15:02:33 by ael-hiou         ###   ########.fr       */
+/*   Updated: 2022/02/22 11:53:02 by ael-hiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,6 @@ void	close_pipes(int (*pipes_array)[2], int array_length);
 void	wait_for_childs(int *p_ids, int commands_number);
 void	duplicating(int input, int output);
 int		get_input_lines(char *limiter);
+char	*find_quotes_replacing(char *command);
+void	replacing(char *s, char to_be_replaced, char replacer);
 #endif

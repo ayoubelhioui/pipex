@@ -13,8 +13,9 @@
 CC = cc
 CFLAGS = -Wextra -Werror -Wall
 SRC = pipex.c includes/get_next_line.c includes/get_next_line_utils.c \
-helper_files/ft_putstr_fd.c helper_files/ft_split.c helper_files/ft_strcmp.c helper_files/ft_strncmp.c \
-pipex_utils.c helper_files/ft_substr.c
+helper_files/ft_putstr_fd.c helper_files/ft_split.c \
+helper_files/ft_strcmp.c helper_files/ft_strncmp.c \
+pipex_utils.c helper_files/ft_substr.c pipex_utils_helper.c
 NAME = pipex
 
 all:$(NAME)
